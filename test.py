@@ -79,22 +79,23 @@ def color_box(label, color_name):
 
 # 앱 시작
 st.title("👗 옷 코디 전체 추천 앱")
-st.write("상의 색을 선택하면 하의, 신발, 가방까지 풀 코디를 추천해드려요!")
+st.write("상의 색을 선택하면 하의, 신발, 가방까지 **3세트 코디**를 추천해드려요!")
 
 # 사용자 입력
 selected_top = st.selectbox("👕 상의 색을 골라주세요:", list(outfit_palette.keys()))
 
 if st.button("✨ 코디 추천받기"):
     palette = outfit_palette[selected_top]
-    bottom = random.choice(palette["하의"])
-    shoes = random.choice(palette["신발"])
-    bag = random.choice(palette["가방"])
 
-    st.subheader("오늘의 추천 코디 ✨")
-    
-    color_box("👕 상의", selected_top)
-    color_box("👖 하의", bottom)
-    color_box("👟 신발", shoes)
-    color_box("👜 가방", bag)
+    st.subheader("오늘의 추천 코디 3세트 ✨")
 
-    st.info("👉 팁: 액세서리(모자, 시계, 목걸이 등)로 포인트 컬러를 추가하면 더 멋져요!")
+    for i in range(1, 4):
+        bottom = random.choice(palette["하의"])
+        shoes = random.choice(palette["신발"])
+        bag = random.choice(palette["가방"])
+
+        st.markdown(f"### 👗 코디 {i}")
+        color_box("👕 상의", selected_top)
+        color_box("👖 하의", bottom)
+        color_box("👟 신발", shoes)
+        color_box("👜 가방", bag)
