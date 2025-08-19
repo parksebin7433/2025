@@ -128,9 +128,3 @@ if st.button("✨ 코디 추천받기"):
         st.markdown("---")
 
     st.info("👉 계절·스타일에 맞는 색 조합으로 오늘 코디 완성!")
-# 계절별 상의 색 전체 가져오기
-available_tops = []
-for stl in outfit_palette[season]:
-    available_tops.extend(outfit_palette[season][stl].keys())
-available_tops = sorted(list(set(available_tops)))  # 중복 제거 후 정렬
-selected_top = st.selectbox("👕 상의 색을 골라주세요:", available_tops)
