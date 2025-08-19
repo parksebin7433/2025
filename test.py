@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 
-# 계절 + 스타일별 색상 팔레트 (봄, 여름, 가을, 겨울 모두 포함)
+# 계절 + 스타일별 색상 팔레트 (상의 → 나머지 아이템)
 outfit_palette = {
     "봄": {
         "캐주얼": {
@@ -75,7 +75,7 @@ outfit_palette = {
     }
 }
 
-# HTML용 색상 코드
+# HTML용 색상 코드 (미리보기용)
 color_codes = {
     "화이트": "#FFFFFF", "검정": "#000000", "그레이": "#808080",
     "베이지": "#F5F5DC", "네이비": "#000080", "빨강": "#FF0000",
@@ -101,4 +101,30 @@ def color_box(label, color_name):
     )
 
 # 앱 시작
-st.title("👗 사계
+st.title("👗 사계절 옷 코디 전체 추천 앱")
+st.write("계절과 스타일을 선택하고, 상의 색을 고르면 하의·신발·가방까지 **3세트 코디**를 추천해드려요!")
+
+# 사용자 입력
+season = st.selectbox("🍂 계절을 선택해주세요:", list(outfit_palette.keys()))
+style = st.selectbox("🎯 스타일을 선택해주세요:", list(outfit_palette[season].keys()))
+
+available_tops = list(outfit_palette[season][style].keys())
+selected_top = st.selectbox("👕 상의 색을 골라주세요:", available_tops)
+
+if st.button("✨ 코디 추천받기"):
+    palette = outfit_palette[season][style][selected_top]
+    st.subheader(f"{season} · {style} 스타일 추천 코디 3세트 ✨")
+
+    for i in range(1, 4):
+        bottom = random.choice(palette["하의"])
+        shoes = random.choice(palette["신발"])
+        bag = random.choice(palette["가방"])
+
+        st.markdown(f"### 👗 코디 {i}")
+        color_box("👕 상의", selected_top)
+        color_box("👖 하의", bottom)
+        color_box("👟 신발", shoes)
+        color_box("👜 가방", bag)
+        st.markdown("---")
+
+    st.info("👉 계절·스타일에 맞는 색 조합으로 오늘 코디 완성!")
