@@ -45,18 +45,56 @@ outfit_palette = {
     }
 }
 
+# HTML용 색상 코드 (미리보기용)
+color_codes = {
+    "화이트": "#FFFFFF",
+    "블랙": "#000000",
+    "그레이": "#808080",
+    "베이지": "#F5F5DC",
+    "네이비": "#000080",
+    "레드": "#FF0000",
+    "옐로우": "#FFD700",
+    "핑크": "#FFC0CB",
+    "브라운": "#8B4513",
+    "카키": "#808000",
+    "데님 블루": "#1E3A5F",
+    "실버": "#C0C0C0",
+    "민트": "#98FF98"
+}
+
+# 색상 박스 출력 함수
+def color_box(label, color_name):
+    color = color_codes.get(color_name, "#FFFFFF")
+    text_color = "#000000" if color_name != "블랙" else "#FFFFFF"
+    st.markdown(
+        f"""
+        <div style="display:flex; align-items:center; margin:5px 0;">
+            <div style="width:30px; height:30px; background-color:{color}; 
+                        border:1px solid #000; margin-right:10px;"></div>
+            <span style="color:{text_color}; font-weight:bold;">{label}: {color_name}</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# 앱 시작
 st.title("👗 옷 코디 전체 추천 앱")
 st.write("상의 색을 선택하면 하의, 신발, 가방까지 풀 코디를 추천해드려요!")
 
 # 사용자 입력
-selected_top = st.selectbox("상의 색을 골라주세요:", list(outfit_palette.keys()))
+selected_top = st.selectbox("👕 상의 색을 골라주세요:", list(outfit_palette.keys()))
 
-if st.button("코디 추천받기"):
+if st.button("✨ 코디 추천받기"):
     palette = outfit_palette[selected_top]
     bottom = random.choice(palette["하의"])
     shoes = random.choice(palette["신발"])
     bag = random.choice(palette["가방"])
 
-    st.success(f"✨ 추천 코디 ✨\n\n👕 상의: {selected_top}\n👖 하의: {bottom}\n👟 신발: {shoes}\n👜 가방: {bag}")
+    st.subheader("오늘의 추천 코디 ✨")
+    
+    color_box("👕 상의", selected_top)
+    color_box("👖 하의", bottom)
+    color_box("👟 신발", shoes)
+    color_box("👜 가방", bag)
 
-    st.write("👉 포인트 컬러는 액세서리(모자, 시계 등)로 살짝 넣어주는 게 좋아요!")
+    st.info("👉 팁: 액세서리(모자, 시계, 목걸이 등)로 포인트 컬러를 추가하면 더 멋져요!")
