@@ -4,6 +4,14 @@ import random
 # 상의 색상 전체 리스트 (항상 이 9가지가 보이도록)
 ALL_TOPS = ["빨강","주황","노랑","초록","파랑","보라","핑크","화이트","검정"]
 
+# 퍼스널컬러 추천 상의 팔레트
+personal_color_tops = {
+    "봄웜": ["아이보리", "코랄", "라이트 옐로우", "라이트 그린", "피치"],
+    "여름쿨": ["라벤더", "라이트 블루", "민트", "핑크", "소프트 네이비"],
+    "가을웜": ["브라운", "머스타드", "카키", "버건디", "올리브"],
+    "겨울쿨": ["블랙", "화이트", "레드", "코발트 블루", "퍼플"]
+}
+
 # 계절 + 스타일별 색상 팔레트 (상의 → 나머지 아이템)
 outfit_palette = {
     "봄": {
@@ -78,14 +86,14 @@ outfit_palette = {
     }
 }
 
-# 스타일별 기본 팔레트 (선택한 상의 색 조합이 정의되지 않았을 때 사용)
+# 스타일별 기본 팔레트
 style_defaults = {
     "캐주얼": {"하의": ["데님 블루", "베이지", "화이트"], "신발": ["화이트", "블랙"], "가방": ["브라운", "화이트"]},
     "포멀": {"하의": ["블랙", "네이비", "그레이"], "신발": ["블랙", "브라운", "실버"], "가방": ["블랙", "브라운", "네이비"]},
     "스포츠": {"하의": ["블랙", "그레이", "네이비"], "신발": ["화이트", "블랙", "레드"], "가방": ["블랙", "화이트", "그레이"]},
 }
 
-# HTML용 색상 코드 (미리보기용) - 팔레트에 등장하는 모든 색상 포함
+# HTML용 색상 코드
 color_codes = {
     "화이트": "#FFFFFF", "검정": "#000000", "그레이": "#808080",
     "베이지": "#F5F5DC", "네이비": "#000080", "빨강": "#FF0000",
@@ -95,7 +103,7 @@ color_codes = {
     "실버": "#C0C0C0", "민트": "#98FF98", "레드": "#FF0000"
 }
 
-# 색상 박스 출력 함수 (라벨은 항상 검정 글자색으로 가독성 보장)
+# 색상 박스 출력 함수
 def color_box(label, color_name):
     color = color_codes.get(color_name, "#FFFFFF")
     st.markdown(
@@ -111,19 +119,27 @@ def color_box(label, color_name):
 
 # 앱 시작
 st.title("👗 사계절 옷 코디 전체 추천 앱")
-st.write("계절과 스타일을 선택하고, 상의 색을 고르면 하의·신발·가방까지 **3세트 코디**를 추천해드려요!")
+st.write("계절, 스타일, 퍼스널컬러를 선택하고 상의 색을 고르면 하의·신발·가방까지 **3세트 코디**를 추천해드려요!")
 
 # 사용자 입력
 season = st.selectbox("🍂 계절을 선택해주세요:", list(outfit_palette.keys()))
 style = st.selectbox("🎯 스타일을 선택해주세요:", list(outfit_palette[season].keys()))
+personal = st.selectbox("🌈 퍼스널컬러를 선택해주세요:", list(personal_color_tops.keys()))
 selected_top = st.selectbox("👕 상의 색을 골라주세요:", ALL_TOPS)
 
+# 퍼스널컬러 가이드 출력
+if selected_top not in personal_color_tops[personal]:
+    st.warning(f"⚠️ {personal} 타입에는 '{selected_top}' 색상이 잘 맞지 않을 수 있어요!")
+else:
+    st.success(f"✅ {personal} 타입에 '{selected_top}' 색상은 잘 어울려요!")
+
+# 추천 버튼
 if st.button("✨ 코디 추천받기"):
-    # 팔레트 찾기: 지정된 색상이 없으면 스타일 기본 팔레트 사용
+    # 팔레트 찾기
     palette = outfit_palette[season][style].get(selected_top, style_defaults[style])
 
     st.subheader(f"{season} · {style} 스타일 추천 코디 3세트 ✨")
-    for i in range(1, 4):
+    for i in range(1, 3+1):
         bottom = random.choice(palette["하의"])
         shoes = random.choice(palette["신발"])
         bag = random.choice(palette["가방"])
@@ -135,4 +151,4 @@ if st.button("✨ 코디 추천받기"):
         color_box("👜 가방", bag)
         st.markdown("---")
 
-    st.info("👉 계절·스타일에 맞는 색 조합으로 오늘 코디 완성!")
+    st.info("👉 계절·스타일·퍼스널컬러에 맞는 색 조합으로 오늘 코디 완성!")
